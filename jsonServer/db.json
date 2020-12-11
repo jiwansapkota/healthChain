@@ -1,0 +1,29 @@
+{
+    "medicine":[{
+        "drugNumber":"1234",
+        "manufacturer": "jiwan and co",
+        "manufacturedIn": "Nepal",
+        "mfgDate": "",
+        "expDate": "",
+        "dose": "",
+        "composition": "",
+        "name":"",
+        "bn": "",
+        "isSoldOut": "",
+        "mrp":"25"
+    },
+    {
+        "drugNumber": "2345",
+        "manufacturer": "jiwan and co",
+        "manufacturedIn": "Nepal",
+        "mfgDate": "",
+        "expDate": "",
+        "dose": "",
+        "composition": "",
+        "name": "",
+        "bn": "",
+        "isSoldOut": "",
+        "mrp": "25"
+      }
+    ]
+}
