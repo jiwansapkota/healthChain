@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       // home: QrScanner(),
-      home: Details("1234"),
+      home: Details("2345"),
     );
   }
 }
