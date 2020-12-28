@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:healthChain/constant.dart';
+import 'package:healthChain/manuform.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -20,18 +22,33 @@ class _DetailsState extends State<Details> {
     futureMedicine = getdata();
   }
 
+  onAddItemHandler() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => MedicineDataInputForm()));
+  }
+
   Future<Medicine> getdata() async {
     print("Entered getdata");
     http.Response response = await http.get(Uri.encodeFull(
-        "http://192.168.100.5:3000/medicine?drugNumber=" + widget.scanResult));
+        "http://192.168.100.9:3000/medicine?drugNumber=" + widget.scanResult));
     print("scanned");
     print(response.body);
     if (response.statusCode == 200) {
+      print("positive response");
       // If the server did return a 200 OK response,
       // then parse the JSON.
       // return jsonDecode(response.body)[0];
-      return Medicine.fromJson(jsonDecode(response.body)[0]);
+      if (response.body == "[]") {
+        print("entered first condition");
+        return Medicine.fromJson(
+          jsonDecode("{}")
+        );
+      } else {
+        print("entered second condition");
+        return Medicine.fromJson(jsonDecode(response.body)[0]);
+      }
     } else {
+      print("negative response");
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to load album');
@@ -58,7 +75,7 @@ class _DetailsState extends State<Details> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
-                    children: snapshot.data.drugNumber == null
+                    children: snapshot.data.expDate == ""
                         ? [
                             Text(
                               "DrugNumber :" + snapshot.data.drugNumber,
@@ -134,13 +151,24 @@ class _DetailsState extends State<Details> {
               ),
             );
           } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
+            Text(
+              "DrugNumber :" + Constants.drugNumber,
+              style: TextStyle(
+                fontSize: 18.0,
+              ),
+            );
           }
 
           // By default, show a loading spinner.
           return CircularProgressIndicator();
         },
       )),
+      floatingActionButton: FloatingActionButton(
+        onPressed: onAddItemHandler,
+        // onPressed: null,
+        child: Text("Add"),
+        backgroundColor: Colors.purple[600],
+      ),
     );
   }
 }

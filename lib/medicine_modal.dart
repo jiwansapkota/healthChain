@@ -1,4 +1,5 @@
-  class Medicine {
+
+class Medicine {
     final String drugNumber;
     final String manufacturer;
     final String manufacturedIn;

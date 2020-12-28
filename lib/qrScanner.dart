@@ -1,6 +1,7 @@
 import 'package:healthChain/details.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:flutter/material.dart';
+import 'constant.dart';
 
 class QrScanner extends StatefulWidget {
   @override
@@ -13,6 +14,7 @@ class _QrScannerState extends State<QrScanner> {
     String cameraScanResult = await scanner.scan();
     setState(() {
       scanResult=cameraScanResult;
+      Constants.drugNumber=scanResult;
     });
      Navigator.push(
               context, MaterialPageRoute(builder: (context) => Details(scanResult)));

@@ -4,7 +4,7 @@
         "manufacturer": "jiwan and co",
         "manufacturedIn": "Nepal",
         "mfgDate": "3rd dec",
-        "expDate": "",
+        "expDate": "4th dec",
         "dose": "",
         "composition": "",
         "name":"paracetamol",
@@ -13,17 +13,17 @@
         "mrp":"25"
     },
     {
-        "drugNumber": "2345",
-        "manufacturer": "jiwan and co",
-        "manufacturedIn": "Nepal",
-        "mfgDate": "2nd nov",
+        "drugNumber": "",
+        "manufacturer": "",
+        "manufacturedIn": "",
+        "mfgDate": "",
         "expDate": "",
         "dose": "",
         "composition": "",
-        "name": "brufin",
+        "name": "",
         "bn": "",
         "isSoldOut": "",
-        "mrp": "25"
+        "mrp": ""
       }
     ]
 }

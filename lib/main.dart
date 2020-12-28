@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthChain/details.dart';
+import 'package:healthChain/manuform.dart';
 import 'package:healthChain/qrScanner.dart';
 
 void main() {
@@ -47,8 +48,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // home: QrScanner(),
-      home: Details("2345"),
+      home: QrScanner(),
+      //  home: Details("2345"),
+      // home:MedicineDataInputForm(),
     );
   }
 }
