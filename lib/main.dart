@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healthChain/details.dart';
 import 'package:healthChain/manuform.dart';
 import 'package:healthChain/qrScanner.dart';
+import 'package:healthChain/success.dart';
 
 void main() {
   runApp(MyApp());
@@ -50,7 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return MaterialApp(
       home: QrScanner(),
       //  home: Details("2345"),
-      // home:MedicineDataInputForm(),
+      //  home:MedicineDataInputForm(),
+      
     );
   }
 }

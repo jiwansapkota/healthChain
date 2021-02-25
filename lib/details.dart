@@ -30,7 +30,7 @@ class _DetailsState extends State<Details> {
   Future<Medicine> getdata() async {
     print("Entered getdata");
     http.Response response = await http.get(Uri.encodeFull(
-        "http://192.168.100.9:3000/medicine?drugNumber=" + widget.scanResult));
+        "http://192.168.1.6:3000/medicine?drugNumber=" + widget.scanResult));
     print("scanned");
     print(response.body);
     if (response.statusCode == 200) {

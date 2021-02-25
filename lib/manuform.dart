@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:healthChain/medicine_modal.dart';
+import 'package:healthChain/success.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 import 'widget.dart';
 
 class MedicineDataInputForm extends StatefulWidget {
@@ -24,11 +29,29 @@ class _MedicineDataInputFormState extends State<MedicineDataInputForm> {
   TextEditingController batchNoEditingController = new TextEditingController();
   TextEditingController maximumRetailPriceEditingController =
       new TextEditingController();
-  onSubmitHandler() {
+  onSubmitHandler() async {   
     if (formKey.currentState.validate()) {
       setState(() {
-        isLoading = true;
+        isLoading = true;      
       });
+      final uri="http://192.168.1.6:3000/medicine";
+       var requestBody={
+      " manufacturer": manufacurerEditingController,
+        "manufacturedIn":manufacuredInEditingController,
+        "mfgDate":manufacuredDateEditingController ,
+        "expDate": expiryDateEditingController,
+
+    };
+    print("entering into the post");
+      http.Response response = await http.post(
+        uri,
+        body: json.encode(requestBody),
+    );
+    print(response.body);
+       Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Success()));
+ 
+
     }
   }
 
@@ -76,7 +99,7 @@ class _MedicineDataInputFormState extends State<MedicineDataInputForm> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          // signMeIn();
+                          onSubmitHandler();
                         },
                         child: Container(
                           alignment: Alignment.center,
