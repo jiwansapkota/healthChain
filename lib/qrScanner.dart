@@ -24,25 +24,36 @@ class _QrScannerState extends State<QrScanner> {
   Widget build(BuildContext context) {
    return Scaffold(
       appBar: AppBar(
-        title: Text('Scan Demo'),
+        title: Text('HealthChain App'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            scanResult == ''
-                ? Text('Result will be displayed here')
-                : Text(scanResult),
-            SizedBox(height: 20),
-            RaisedButton(
-              color: Colors.blue,
-              child: Text(
-                'Click To Scan',
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: scanQRCode,
-            )
-          ],
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/bg_image.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              scanResult == ''
+                  ? Text('',
+                   style: TextStyle(backgroundColor: Color.fromRGBO(255, 255, 255, 0.85)),
+                  )
+                  : Text(scanResult,
+                   style: TextStyle(backgroundColor: Color.fromRGBO(255, 255, 255, 0.85)),),
+              SizedBox(height: 20),
+              RaisedButton(
+                color: Colors.blue,
+                child: Text(
+                  'Click Here To Scan',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: scanQRCode,
+              )
+            ],
+          ),
         ),
       ),
     );

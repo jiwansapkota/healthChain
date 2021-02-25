@@ -38,19 +38,19 @@ class Medicine {
          isSoldOut: json['isSoldOut'],
          mrp: json['mrp'],
          );
-      Map<String, dynamic> toJson() => {
-        "drugNumber": drugNumber,
-        "manufacturer": manufacturer,
-        "manufacturedIn": manufacturedIn,
-        "mfgDate": mfgDate,
-        "expDate": expDate,
-        "dose": dose,
-        "composition": composition,
-        "name": name,
-        "bn": bn,
-        "isSoldOut": isSoldOut,
-        "mrp": mrp,
-    };
+    //   Map<String, dynamic> toJson() => {
+    //     "drugNumber": drugNumber,
+    //     "manufacturer": manufacturer,
+    //     "manufacturedIn": manufacturedIn,
+    //     "mfgDate": mfgDate,
+    //     "expDate": expDate,
+    //     "dose": dose,
+    //     "composition": composition,
+    //     "name": name,
+    //     "bn": bn,
+    //     "isSoldOut": isSoldOut,
+    //     "mrp": mrp,
+    // };
     }
 
 }
