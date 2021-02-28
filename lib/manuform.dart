@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:healthChain/constant.dart';
 import 'package:healthChain/medicine_modal.dart';
 import 'package:healthChain/success.dart';
 import 'package:http/http.dart' as http;
@@ -7,6 +8,8 @@ import 'dart:convert';
 import 'widget.dart';
 
 class MedicineDataInputForm extends StatefulWidget {
+  final String scanResult;
+  MedicineDataInputForm(this.scanResult);
   @override
   _MedicineDataInputFormState createState() => _MedicineDataInputFormState();
 }
@@ -15,40 +18,57 @@ class _MedicineDataInputFormState extends State<MedicineDataInputForm> {
   bool isLoading = false;
   final formKey = GlobalKey<FormState>();
   TextEditingController manufacuredDateEditingController =
-      new TextEditingController();
+      new TextEditingController(text: "2020-10-01");
   TextEditingController manufacurerEditingController =
-      new TextEditingController();
+      new TextEditingController(text: "Beijing Pharma");
   TextEditingController manufacuredInEditingController =
-      new TextEditingController();
+      new TextEditingController(text:"China");
   TextEditingController expiryDateEditingController =
-      new TextEditingController();
-  TextEditingController dosEditingController = new TextEditingController();
+      new TextEditingController(text: "2021-10-01");
+  TextEditingController dosEditingController = new TextEditingController(text: "100mg");
   TextEditingController compositionEditingController =
-      new TextEditingController();
-  TextEditingController nameEditingController = new TextEditingController();
-  TextEditingController batchNoEditingController = new TextEditingController();
+      new TextEditingController(text: "acetone-50mg,acetic acid-40mg");
+  TextEditingController nameEditingController = new TextEditingController(text: "Aspirin");
+  TextEditingController batchNoEditingController = new TextEditingController(text: "56/56");
   TextEditingController maximumRetailPriceEditingController =
-      new TextEditingController();
+      new TextEditingController(text:"55");
   onSubmitHandler() async {
+    print('--------mrp is: ');
+    print(maximumRetailPriceEditingController.text);
+
     if (formKey.currentState.validate()) {
       setState(() {
-        isLoading = true;
+        // isLoading = true;
       });
-      final uri = "http://192.168.1.6:3000/medicine";
+      final uri = "${Constants.backendIp}/manufacture-drug";
       var requestBody = {
-        " manufacturer": manufacurerEditingController,
-        "manufacturedIn": manufacuredInEditingController,
-        "mfgDate": manufacuredDateEditingController,
-        "expDate": expiryDateEditingController,
+        "manufacturer": jsonDecode(widget.scanResult)["manufacturer"],
+        "manufacturedIn": manufacuredInEditingController.text,
+        "drugNumber":jsonDecode(widget.scanResult)["drugNumber"],
+        "mfgDate": manufacuredDateEditingController.text,
+        "expDate": expiryDateEditingController.text,
+        "dose": dosEditingController.text,
+        "composition": compositionEditingController.text,
+        "name": nameEditingController.text,
+        "bn": batchNoEditingController.text,
+        "mrp": maximumRetailPriceEditingController.text,
       };
+      print(requestBody);
       print("entering into the post");
-      http.Response response = await http.post(
-        uri,
-        body: json.encode(requestBody),
-      );
-      print(response.body);
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Success()));
+      try {
+        http.Response response = await http.post(
+          uri,
+          headers: {"Content-type": "application/json"},
+          body: json.encode(requestBody),
+        );
+        print("finished calling api");
+        print(response.body);
+      } catch (e) {
+        print("got exception");
+        print(e);
+      }
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (context) => Success()));
     }
   }
 
@@ -79,7 +99,7 @@ class _MedicineDataInputFormState extends State<MedicineDataInputForm> {
                 height: MediaQuery.of(context).size.height - 50,
                 alignment: Alignment.bottomCenter,
                 child: Container(
-                  color: Color.fromRGBO(255, 255, 255, 0.85),
+                  color: Color.fromRGBO(255, 255, 255, 0.95),
                   padding: EdgeInsets.symmetric(horizontal: 24.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -87,21 +107,21 @@ class _MedicineDataInputFormState extends State<MedicineDataInputForm> {
                       Form(
                         key: formKey,
                         child: Column(children: [
-                          inputFormField(
-                              "Manufacturer", manufacurerEditingController),
-                          inputFormField("Manufactured In",
+                          inputFormField("Name of Manufacturer",
+                              manufacurerEditingController),
+                          inputFormField("Place of Manufacture",
                               manufacuredInEditingController),
+                          inputFormField("Name of Drug", nameEditingController),
+                          inputFormField("Manufactured Date",
+                              manufacuredDateEditingController),
                           inputFormField(
-                              "Mfg Date", manufacuredDateEditingController),
-                          inputFormField(
-                              "Exp Date", expiryDateEditingController),
+                              "Expiry Date", expiryDateEditingController),
                           inputFormField("Dose", dosEditingController),
                           inputFormField(
                               "Composition", compositionEditingController),
-                          inputFormField("Name", nameEditingController),
                           inputFormField("Batch No", batchNoEditingController),
-                          inputFormField(
-                              "MRP", maximumRetailPriceEditingController),
+                          inputFormField("Maximum Retail Price",
+                              maximumRetailPriceEditingController),
                         ]),
                       ),
                       SizedBox(

@@ -22,9 +22,9 @@ TextStyle inputTextStyle() {
   );
 }
 
-TextFormField inputFormField(String hint, TextEditingController controller) {
+TextFormField inputFormField(String hint, TextEditingController controller ) {
   return TextFormField(
-    textAlign: TextAlign.center,
+    textAlign: TextAlign.left,
     textAlignVertical: TextAlignVertical.bottom,
     validator: null,
     decoration: textFieldInputDecoration(hint),

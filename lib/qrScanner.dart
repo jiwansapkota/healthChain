@@ -27,12 +27,12 @@ class _QrScannerState extends State<QrScanner> {
         title: Text('HealthChain App'),
       ),
       body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/bg_image.jpg"),
-            fit: BoxFit.cover,
-          ),
-        ),
+        // decoration: BoxDecoration(
+        //   image: DecorationImage(
+        //     image: AssetImage("assets/bg_image.jpg"),
+        //     fit: BoxFit.cover,
+        //   ),
+        // ),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
