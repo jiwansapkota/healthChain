@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:healthChain/constant.dart';
+import 'package:healthChain/qrScanner.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'widget.dart';
@@ -66,6 +67,8 @@ class _BuyerDataInputFormState extends State<BuyerDataInputForm> {
             backgroundColor: Colors.green,
             textColor: Colors.white,
             fontSize: 16.0);
+           Navigator.push(
+          context, MaterialPageRoute(builder: (context) => QrScanner()));
       } catch (e) {
         print("got exception");
         print(e);
@@ -120,6 +123,7 @@ class _BuyerDataInputFormState extends State<BuyerDataInputForm> {
                           inputFormField(
                               "Date of Purchase", purchaseDateTimeController),
                           inputFormField("Purchase Price", boughtAtController),
+                          Radio(value: false,onChanged: null,)
                         ]),
                       ),
                       SizedBox(

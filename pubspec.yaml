@@ -31,6 +31,8 @@ dependencies:
   qrscan: ^0.2.19
   http: ^0.12.2
   fluttertoast: ^7.1.6
+  file_picker: ^2.1.0
+
 
 
 dev_dependencies:
