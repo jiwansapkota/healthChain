@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:healthChain/buyerForm.dart';
 import 'package:healthChain/constant.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:healthChain/manuform.dart';
+import 'package:healthChain/qrScanner.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -17,6 +19,8 @@ class Details extends StatefulWidget {
 class _DetailsState extends State<Details> {
   bool isLoading = true;
   bool isManufactured = false;
+  Map<String, dynamic> drugDetails;
+
   Future<dynamic> futureMedicine;
   @override
   void initState() {
@@ -31,12 +35,12 @@ class _DetailsState extends State<Details> {
         MaterialPageRoute(
             builder: (context) => MedicineDataInputForm(widget.scanResult)));
   }
-  // Future<Medicine> getMoreDetail()async{
-  //   http.Response response = await http.get(Uri.encodeFull(
-  //       "http://192.168.1.6:3000/medicine?drugNumber=" + widget.scanResult));
-  //       print(response.body);
-
-  // }
+  buyDrug() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => BuyerDataInputForm(drugDetails)));
+  }
 
   Future<dynamic> getdata() async {
     print("Entered getdata");
@@ -52,6 +56,9 @@ class _DetailsState extends State<Details> {
       print("scanned");
       print(response.body);
       Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+      setState(() {
+        drugDetails = jsonResponse["state"];
+      });
       print(jsonResponse['status']);
       if (response.statusCode == 200) {
         if (jsonResponse['state']['currentState'] == null) {
@@ -88,6 +95,9 @@ class _DetailsState extends State<Details> {
           backgroundColor: Colors.red,
           textColor: Colors.white,
           fontSize: 16.0);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => QrScanner()));
+
       return;
     }
   }
@@ -205,14 +215,6 @@ class _DetailsState extends State<Details> {
                                       ),
                                     ),
                                   ),
-                                  RaisedButton(
-                                    color: Colors.lightBlue,
-                                    child: Text(
-                                      'More',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    onPressed: null,
-                                  ),
                                 ],
                               ),
                             )
@@ -230,35 +232,46 @@ class _DetailsState extends State<Details> {
                               ),
                             ))),
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: RaisedButton(
-                    color: Colors.lightBlue,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(100, 15, 100, 15),
-                      child: Text(
-                        'See Drug History',
-                        style: TextStyle(color: Colors.white),
+                isManufactured
+                    ? Align(
+                        alignment: Alignment.bottomCenter,
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width - 50,
+                          child: RaisedButton(
+                            color: Colors.lightBlue,
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+                              child: Text(
+                                'See Drug History',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            onPressed: onAddItemHandler,
+                          ),
+                        ),
+                      )
+                    : SizedBox(
+                        height: 45,
                       ),
-                    ),
-                    onPressed: onAddItemHandler,
-                  ),
-                ),
                 SizedBox(
                   height: 10,
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: RaisedButton(
-                    color: Colors.lightBlue,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(100, 15, 100, 15),
-                      child: Text(
-                        'Manufacture Drug',
-                        style: TextStyle(color: Colors.white),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width - 50,
+                    child: RaisedButton(
+                      color: Colors.lightBlue,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+                        child: Text(
+                          isManufactured? 'Buy Drug':
+                          'Manufacture Drug',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
+                      onPressed: isManufactured? buyDrug: onAddItemHandler,
                     ),
-                    onPressed: onAddItemHandler,
                   ),
                 ),
               ]);

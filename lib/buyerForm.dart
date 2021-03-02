@@ -1,62 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:healthChain/constant.dart';
-import 'package:healthChain/medicine_modal.dart';
-import 'package:healthChain/success.dart';
 import 'package:http/http.dart' as http;
-import 'dart:async';
 import 'dart:convert';
 import 'widget.dart';
 
-class MedicineDataInputForm extends StatefulWidget {
-  final String scanResult;
-  MedicineDataInputForm(this.scanResult);
+class BuyerDataInputForm extends StatefulWidget {
+  Map<String, dynamic> drugDetails;
+  BuyerDataInputForm(this.drugDetails);
   @override
-  _MedicineDataInputFormState createState() => _MedicineDataInputFormState();
+  _BuyerDataInputFormState createState() => _BuyerDataInputFormState();
 }
 
-class _MedicineDataInputFormState extends State<MedicineDataInputForm> {
+class _BuyerDataInputFormState extends State<BuyerDataInputForm> {
   bool isLoading = false;
   bool isSubmitting = false;
   final formKey = GlobalKey<FormState>();
-  TextEditingController manufacuredDateEditingController =
-      new TextEditingController(text: "2020-10-01");
-  TextEditingController manufacurerEditingController =
-      new TextEditingController(text: "Beijing Pharma");
-  TextEditingController manufacuredInEditingController =
-      new TextEditingController(text: "China");
-  TextEditingController expiryDateEditingController =
-      new TextEditingController(text: "2021-10-01");
-  TextEditingController dosEditingController =
-      new TextEditingController(text: "100mg");
-  TextEditingController compositionEditingController =
-      new TextEditingController(text: "acetone-50mg,acetic acid-40mg");
-  TextEditingController nameEditingController =
-      new TextEditingController(text: "Aspirin");
-  TextEditingController batchNoEditingController =
-      new TextEditingController(text: "56/56");
-  TextEditingController maximumRetailPriceEditingController =
-      new TextEditingController(text: "55");
+  TextEditingController purchaseDateTimeController =
+      new TextEditingController(text: "2020-10-05");
+  TextEditingController newOwnerController =
+      new TextEditingController(text: "Nepal Pharma");
+  TextEditingController purchasePlaceController =
+      new TextEditingController(text: "Beijing");
+  TextEditingController boughtAtController =
+      new TextEditingController(text: "45");
   onSubmitHandler() async {
     print('--------mrp is: ');
-    print(maximumRetailPriceEditingController.text);
+    print(boughtAtController.text);
 
     if (formKey.currentState.validate()) {
       setState(() {
         // isLoading = true;
       });
-      final uri = "${Constants.backendIp}/manufacture-drug";
+      final uri = "${Constants.backendIp}/transfer-drug";
+      print("this is received drug detaisl------------------");
+      print(widget.drugDetails);
       var requestBody = {
-        "manufacturer": jsonDecode(widget.scanResult)["manufacturer"],
-        "manufacturedIn": manufacuredInEditingController.text,
-        "drugNumber": jsonDecode(widget.scanResult)["drugNumber"],
-        "mfgDate": manufacuredDateEditingController.text,
-        "expDate": expiryDateEditingController.text,
-        "dose": dosEditingController.text,
-        "composition": compositionEditingController.text,
-        "name": nameEditingController.text,
-        "bn": batchNoEditingController.text,
-        "mrp": maximumRetailPriceEditingController.text,
+        "manufacturer": widget.drugDetails["manufacturer"],
+        "drugNumber": widget.drugDetails["drugNumber"],
+        "currentOwner": widget.drugDetails["owner"],
+        "newOwner": newOwnerController.text,
+        "boughtAt": boughtAtController.text,
+        "purchaseDateTime": purchaseDateTimeController.text,
+        "purchasePlace": purchasePlaceController.text,
       };
       print(requestBody);
       print("entering into the post");
@@ -73,7 +59,7 @@ class _MedicineDataInputFormState extends State<MedicineDataInputForm> {
         print(response.body);
 
         Fluttertoast.showToast(
-            msg: "Drug successfully added!",
+            msg: "Drug successfully purchased!",
             toastLength: Toast.LENGTH_LONG,
             gravity: ToastGravity.TOP,
             timeInSecForIosWeb: 10,
@@ -97,7 +83,7 @@ class _MedicineDataInputFormState extends State<MedicineDataInputForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Medicine Info Input Form'),
+        title: Text('Buy Drug'),
       ),
       body: isLoading
           ? Container(
@@ -128,21 +114,12 @@ class _MedicineDataInputFormState extends State<MedicineDataInputForm> {
                       Form(
                         key: formKey,
                         child: Column(children: [
-                          inputFormField("Name of Manufacturer",
-                              manufacurerEditingController),
-                          inputFormField("Place of Manufacture",
-                              manufacuredInEditingController),
-                          inputFormField("Name of Drug", nameEditingController),
-                          inputFormField("Manufactured Date",
-                              manufacuredDateEditingController),
+                          inputFormField("Name of Buyer", newOwnerController),
                           inputFormField(
-                              "Expiry Date", expiryDateEditingController),
-                          inputFormField("Dose", dosEditingController),
+                              "Place of Purchase", purchasePlaceController),
                           inputFormField(
-                              "Composition", compositionEditingController),
-                          inputFormField("Batch No", batchNoEditingController),
-                          inputFormField("Maximum Retail Price",
-                              maximumRetailPriceEditingController),
+                              "Date of Purchase", purchaseDateTimeController),
+                          inputFormField("Purchase Price", boughtAtController),
                         ]),
                       ),
                       SizedBox(
