@@ -20,23 +20,40 @@ class _MedicineDataInputFormState extends State<MedicineDataInputForm> {
   bool isSubmitting = false;
   final formKey = GlobalKey<FormState>();
   TextEditingController manufacuredDateEditingController =
-      new TextEditingController(text: "2020-10-01");
+      // new TextEditingController(text: "2020-10-01");
+      new TextEditingController();
   TextEditingController manufacurerEditingController =
-      new TextEditingController(text: "Beijing Pharma");
+      // new TextEditingController(text: "Beijing Pharma");
+            new TextEditingController();
+
   TextEditingController manufacuredInEditingController =
-      new TextEditingController(text: "China");
+      // new TextEditingController(text: "China");
+            new TextEditingController();
+
   TextEditingController expiryDateEditingController =
-      new TextEditingController(text: "2021-10-01");
+      // new TextEditingController(text: "2021-10-01");
+            new TextEditingController();
+
   TextEditingController dosEditingController =
-      new TextEditingController(text: "100mg");
+      // new TextEditingController(text: "100mg");
+            new TextEditingController();
+
   TextEditingController compositionEditingController =
-      new TextEditingController(text: "acetone-50mg,acetic acid-40mg");
+      // new TextEditingController(text: "acetone-50mg,acetic acid-40mg");
+            new TextEditingController();
+
   TextEditingController nameEditingController =
-      new TextEditingController(text: "Aspirin");
+      // new TextEditingController(text: "Aspirin");
+            new TextEditingController();
+
   TextEditingController batchNoEditingController =
-      new TextEditingController(text: "56/56");
+      // new TextEditingController(text: "56/56");
+            new TextEditingController();
+
   TextEditingController maximumRetailPriceEditingController =
-      new TextEditingController(text: "55");
+      // new TextEditingController(text: "55");
+            new TextEditingController();
+
   onSubmitHandler() async {
     print('--------mrp is: ');
     print(maximumRetailPriceEditingController.text);

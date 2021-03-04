@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:healthChain/constant.dart';
+import 'package:healthChain/helperFunction.dart';
 import 'package:healthChain/qrScanner.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -14,26 +15,52 @@ class BuyerDataInputForm extends StatefulWidget {
 }
 
 class _BuyerDataInputFormState extends State<BuyerDataInputForm> {
+  String clientDetails = "";
   bool isLoading = false;
   bool isSubmitting = false;
   final formKey = GlobalKey<FormState>();
   TextEditingController purchaseDateTimeController =
-      new TextEditingController(text: "2020-10-05");
+      // new TextEditingController(text: "2020-10-05");
+            new TextEditingController();
+
   TextEditingController newOwnerController =
-      new TextEditingController(text: "Nepal Pharma");
+      // new TextEditingController(text: "Nepal Pharma");
+            new TextEditingController();
+
   TextEditingController purchasePlaceController =
-      new TextEditingController(text: "Beijing");
+      // new TextEditingController(text: "Beijing");
+            new TextEditingController();
+
   TextEditingController boughtAtController =
-      new TextEditingController(text: "45");
-  onSubmitHandler() async {
+      // new TextEditingController(text: "45");
+            new TextEditingController();
+
+  void initState() {
+    print("initstate called");
+    super.initState();
+    print(HelperFunction.getClientDetailsPreference());
+    getClientDetails() async {
+      print('here is the details of orgatinationas');
+      String receivedDetails =
+          await HelperFunction.getClientDetailsPreference();
+      print(receivedDetails);
+      setState(() {
+        clientDetails = receivedDetails;
+      });
+    }
+    getClientDetails();
+  }
+
+  onPurchaseHandler() async {
     print('--------mrp is: ');
     print(boughtAtController.text);
 
     if (formKey.currentState.validate()) {
+      
       setState(() {
         // isLoading = true;
       });
-      final uri = "${Constants.backendIp}/transfer-drug";
+      final uri = "${Constants.backendIp}/${jsonDecode(clientDetails)["organization"] =='customer'?'retail-drug':'transfer-drug'}";
       print("this is received drug detaisl------------------");
       print(widget.drugDetails);
       var requestBody = {
@@ -67,8 +94,8 @@ class _BuyerDataInputFormState extends State<BuyerDataInputForm> {
             backgroundColor: Colors.green,
             textColor: Colors.white,
             fontSize: 16.0);
-           Navigator.push(
-          context, MaterialPageRoute(builder: (context) => QrScanner()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => QrScanner()));
       } catch (e) {
         print("got exception");
         print(e);
@@ -123,7 +150,6 @@ class _BuyerDataInputFormState extends State<BuyerDataInputForm> {
                           inputFormField(
                               "Date of Purchase", purchaseDateTimeController),
                           inputFormField("Purchase Price", boughtAtController),
-                          Radio(value: false,onChanged: null,)
                         ]),
                       ),
                       SizedBox(
@@ -142,7 +168,7 @@ class _BuyerDataInputFormState extends State<BuyerDataInputForm> {
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
-                            onPressed: onSubmitHandler,
+                            onPressed: onPurchaseHandler,
                           ),
                         ),
                       ),

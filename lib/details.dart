@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:healthChain/buyerForm.dart';
 import 'package:healthChain/constant.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:healthChain/drugHistory.dart';
+import 'package:healthChain/helperFunction.dart';
 import 'package:healthChain/manuform.dart';
 import 'package:healthChain/qrScanner.dart';
+import 'package:healthChain/success.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -19,6 +22,8 @@ class Details extends StatefulWidget {
 class _DetailsState extends State<Details> {
   bool isLoading = true;
   bool isManufactured = false;
+  String clientDetails = "";
+
   Map<String, dynamic> drugDetails;
 
   Future<dynamic> futureMedicine;
@@ -27,6 +32,19 @@ class _DetailsState extends State<Details> {
     print("initstate called");
     super.initState();
     futureMedicine = getdata();
+
+    print(HelperFunction.getClientDetailsPreference());
+    getClientDetails() async {
+      print('here is the details of orgatinationas');
+      String receivedDetails =
+          await HelperFunction.getClientDetailsPreference();
+      print(receivedDetails);
+      setState(() {
+        clientDetails = receivedDetails;
+      });
+    }
+
+    getClientDetails();
   }
 
   onAddItemHandler() {
@@ -35,11 +53,21 @@ class _DetailsState extends State<Details> {
         MaterialPageRoute(
             builder: (context) => MedicineDataInputForm(widget.scanResult)));
   }
+
   buyDrug() {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => BuyerDataInputForm(drugDetails)));
+  }
+
+  seeDrugHistory() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => DrugHistory(widget.scanResult)));
+
+        // MaterialPageRoute(builder: (context) => Example1Vertical()));
   }
 
   Future<dynamic> getdata() async {
@@ -53,8 +81,8 @@ class _DetailsState extends State<Details> {
         isLoading = false;
       });
 
-      print("scanned");
-      print(response.body);
+      // print("scanned");
+      // print(response.body);
       Map<String, dynamic> jsonResponse = jsonDecode(response.body);
       setState(() {
         drugDetails = jsonResponse["state"];
@@ -62,6 +90,11 @@ class _DetailsState extends State<Details> {
       print(jsonResponse['status']);
       if (response.statusCode == 200) {
         if (jsonResponse['state']['currentState'] == null) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      MedicineDataInputForm(widget.scanResult)));
           print("drug not found");
           // Fluttertoast.showToast(
           //     msg: "Drug not manufactured!!",
@@ -103,6 +136,11 @@ class _DetailsState extends State<Details> {
   }
 
   Widget build(BuildContext context) {
+    print('client details in store is-----------');
+    print(clientDetails);
+
+    Map decodedClientDetails = jsonDecode(clientDetails);
+
     MediaQueryData queryData;
     queryData = MediaQuery.of(context);
     var containerHeight = queryData.size.height - 200;
@@ -246,7 +284,7 @@ class _DetailsState extends State<Details> {
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
-                            onPressed: onAddItemHandler,
+                            onPressed: seeDrugHistory,
                           ),
                         ),
                       )
@@ -256,24 +294,37 @@ class _DetailsState extends State<Details> {
                 SizedBox(
                   height: 10,
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width - 50,
-                    child: RaisedButton(
-                      color: Colors.lightBlue,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-                        child: Text(
-                          isManufactured? 'Buy Drug':
-                          'Manufacture Drug',
-                          style: TextStyle(color: Colors.white),
+                decodedClientDetails['organization'] != 'manufacturer'
+                    ? Align(
+                        alignment: Alignment.bottomCenter,
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width - 50,
+                          child: RaisedButton(
+                            color: drugDetails['currentState'] != 3
+                                ? Colors.lightBlue
+                                : Colors.lightBlue[300],
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+                              child: Text(
+                                isManufactured
+                                    ? drugDetails['currentState'] != 3
+                                        ? 'Buy Drug'
+                                        : 'Already Sold'
+                                    : 'Manufacture Drug',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            onPressed: isManufactured
+                                ? drugDetails['currentState'] != 3
+                                    ? buyDrug
+                                    : null
+                                : onAddItemHandler,
+                          ),
                         ),
+                      )
+                    : SizedBox(
+                        height: 0,
                       ),
-                      onPressed: isManufactured? buyDrug: onAddItemHandler,
-                    ),
-                  ),
-                ),
               ]);
             } else {
               return CircularProgressIndicator();

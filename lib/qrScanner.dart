@@ -2,14 +2,28 @@ import 'package:healthChain/details.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:flutter/material.dart';
 import 'constant.dart';
+import 'package:healthChain/helperFunction.dart';
+
 
 class QrScanner extends StatefulWidget {
-  @override
+    @override
   _QrScannerState createState() => _QrScannerState();
 }
 
 class _QrScannerState extends State<QrScanner> {
   String scanResult ="";
+
+  void initState() {
+    print("qr code initstate called");
+    super.initState();
+    getUserName()async{
+      //       print('here is the details of orgatinationas...');
+      // print( await HelperFunction.getClientDetailsPreference());
+    }
+    getUserName();
+
+  }
+
   Future scanQRCode()async{
     String cameraScanResult = await scanner.scan();
     setState(() {

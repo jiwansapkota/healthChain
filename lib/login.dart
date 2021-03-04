@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:healthChain/helperFunction.dart';
 import 'package:healthChain/qrScanner.dart';
+import 'package:healthChain/success.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
@@ -37,21 +39,20 @@ class _LoginState extends State<Login> {
 
       if (result != null) {
         PlatformFile selectedFile = result.files.first;
-        setState(() {
-          file = selectedFile;
-        });
-        print('here is file-------------');
-        print(selectedFile);
-
-        print(selectedFile.name);
-        print(selectedFile.bytes);
-        print(selectedFile.size);
-        print(selectedFile.extension);
-        print(selectedFile.path);
-
-        // List<int> imageBytes = selectedFile.bytes.;
-        // print(imageBytes);
-        // String base64Image = base64Encode(imageBytes);
+        if (selectedFile.extension != 'json') {
+          Fluttertoast.showToast(
+              msg: "Please select config file!",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 10,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        } else {
+          setState(() {
+            file = selectedFile;
+          });
+        }
       } else {
         // User canceled the picker
       }
@@ -69,46 +70,46 @@ class _LoginState extends State<Login> {
     try {
       var request = http.MultipartRequest(
           'POST', Uri.parse("${Constants.backendIp}/connection-profile"));
-      request.fields['imageName'] =
-          'image name here----------------------------------------------------------------------------------------------------------------------';
-      request.files.add(await http.MultipartFile.fromPath(
-        'certificateFile',
-        file.path,
-      ));
+      request.fields['continueAs'] = dropdownValue;
+      if (dropdownValue != 'Customer') {
+        request.files.add(await http.MultipartFile.fromPath(
+          'certificateFile',
+          file.path,
+        ));
+      }
+
       http.StreamedResponse response = await request.send();
-      response.stream.transform(utf8.decoder).listen((event) {
-        print(event);
+      response.stream.transform(utf8.decoder).listen((res) {
+        print("here is response");
+        Map<String, dynamic> responseBody = jsonDecode(res);
+        // print(jsonDecode(res)['status']);
+        // response=jsonDecode(res)['status'];
+        if (responseBody['status'] == 'success') {
+          HelperFunction.saveClientDetailsPreference(
+              jsonEncode(responseBody['data']));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => QrScanner()));
+        } else {
+          Fluttertoast.showToast(
+              msg: responseBody['message'],
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 10,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        }
       });
-      // print(jsonDecode(response.body));
       if (response.statusCode == 200) {
         print('l');
       }
-      // http.Response response = await http.post(
-      //   "${Constants.backendIp}/chaincode-status",
-      //   headers: {"Content-type": "application/json"},
-      // );
-
-      // print("scanned");
-      // print(response.body);
-      // Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-
-      // print(jsonResponse['status']);
-      // if (response.statusCode == 200) {
-      //   print("connection established");
-      //   return null;
-      // } else {
-      //   print("negative response");
-      //   // If the server did not return a 200 OK response,
-      //   // then throw an exception.
-      //   throw Exception('Failed to load album');
-      // }
     } catch (err) {
       print("error has occured");
       print(err);
       Fluttertoast.showToast(
           msg: "Server error or wrong configuration file!",
           toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
+          gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 10,
           backgroundColor: Colors.red,
           textColor: Colors.white,
@@ -118,10 +119,6 @@ class _LoginState extends State<Login> {
     } finally {
       setState(() {
         isSubmitting = false;
-         Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => QrScanner()));
       });
     }
   }
@@ -149,7 +146,8 @@ class _LoginState extends State<Login> {
                         child: Row(
                           children: [
                             Container(
-                              width: 120,
+                              height: 50,
+                              width: 140,
                               padding:
                                   const EdgeInsets.fromLTRB(12.0, 17, 12, 17),
                               decoration: BoxDecoration(
@@ -178,8 +176,9 @@ class _LoginState extends State<Login> {
                             //   width: 20,
                             // ),
                             Container(
+                                height: 50,
                                 width: MediaQuery.of(context).size.width -
-                                    120 -
+                                    140 -
                                     50,
                                 padding:
                                     const EdgeInsets.fromLTRB(8.0, 0, 8.0, 0),
@@ -208,7 +207,7 @@ class _LoginState extends State<Login> {
                                       items: <String>[
                                         'Manufacturer',
                                         'Supplier',
-                                        'Whloesaler',
+                                        'Wholesaler',
                                         'Retailer',
                                         'Customer'
                                       ].map<DropdownMenuItem<String>>(
@@ -237,63 +236,63 @@ class _LoginState extends State<Login> {
                           color: Color.fromRGBO(200, 200, 200, 0),
                         ),
                         width: MediaQuery.of(context).size.width - 50,
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 120,
-                              padding:
-                                  const EdgeInsets.fromLTRB(12.0, 17, 12, 17),
-                              decoration: BoxDecoration(
-                                // border: Border.all(color: Colors.blueAccent)
-                                border: Border(
-                                  right: BorderSide(
-                                    color: Colors.blueAccent,
-                                    width: 0,
-                                  ),
-                                  left: BorderSide(
-                                    color: Colors.blueAccent,
-                                  ),
-                                  top: BorderSide(
-                                    color: Colors.blueAccent,
-                                  ),
-                                  bottom: BorderSide(
-                                    color: Colors.blueAccent,
-                                  ),
-                                ),
-                              ),
-                              child: Text("Certificate File: ",
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                            ),
-                            // SizedBox(
-                            //   width: 20,
-                            // ),
-                            GestureDetector(
-                              onTap: chooseFile,
-                              child: Container(
-                                  width: MediaQuery.of(context).size.width -
-                                      120 -
-                                      50,
-                                  padding: const EdgeInsets.fromLTRB(
-                                      35.0, 17, 35, 17),
-                                  decoration: BoxDecoration(
-                                      border:
-                                          Border.all(color: Colors.blueAccent)),
-                                  child: Center(
-                                    child: Text(
-                                      file != null
-                                          ? file.name.length >= 15
-                                              ? file.name.substring(0, 15) +
-                                                  '...'
-                                              : file.name
-                                          : "Choose",
-                                      style:
-                                          TextStyle(color: Colors.deepPurple),
+                        child: dropdownValue != 'Customer'
+                            ? Row(
+                                children: [
+                                  Container(
+                                    height: 50,
+                                    width: 140,
+                                    padding: const EdgeInsets.fromLTRB(
+                                        12.0, 17, 12, 17),
+                                    decoration: BoxDecoration(
+                                      // border: Border.all(color: Colors.blueAccent)
+                                      border: Border(
+                                        right: BorderSide(
+                                          color: Colors.blueAccent,
+                                          width: 0,
+                                        ),
+                                        left: BorderSide(
+                                          color: Colors.blueAccent,
+                                        ),
+                                        top: BorderSide(
+                                          color: Colors.blueAccent,
+                                        ),
+                                        bottom: BorderSide(
+                                          color: Colors.blueAccent,
+                                        ),
+                                      ),
                                     ),
-                                  )),
-                            ),
-                          ],
-                        ),
+                                    child: Text("Certificate File: ",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                  ),
+                                  // SizedBox(
+                                  //   width: 20,
+                                  // ),
+                                  GestureDetector(
+                                    onTap: chooseFile,
+                                    child: Container(
+                                        height: 50,
+                                        width:
+                                            MediaQuery.of(context).size.width -
+                                                140 -
+                                                50,
+                                        padding: const EdgeInsets.fromLTRB(
+                                            35.0, 17, 35, 17),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.blueAccent)),
+                                        child: Center(
+                                          child: Text(
+                                            file != null ? file.name : "Choose",
+                                            style: TextStyle(
+                                                color: Colors.deepPurple),
+                                          ),
+                                        )),
+                                  ),
+                                ],
+                              )
+                            : SizedBox(height: 0),
                       ),
                     ),
                   ),

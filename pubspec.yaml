@@ -32,6 +32,9 @@ dependencies:
   http: ^0.12.2
   fluttertoast: ^7.1.6
   file_picker: ^2.1.0
+  shared_preferences: ^0.5.7
+  timeline_tile: ^1.0.0
+
 
 
 
