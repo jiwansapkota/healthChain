@@ -286,6 +286,7 @@ class _DrugHistoryState extends State<DrugHistory> {
                                           width: 4 * w / 5,
                                           height: 200,
                                           child: Card(
+                                            color: Colors.lightBlue[100],
                                             margin: EdgeInsets.fromLTRB(
                                                 0, 20, 30, 0),
                                             child: Padding(
