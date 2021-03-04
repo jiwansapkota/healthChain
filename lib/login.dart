@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:healthChain/helperFunction.dart';
 import 'package:healthChain/qrScanner.dart';
-import 'package:healthChain/success.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
@@ -28,12 +27,6 @@ class _LoginState extends State<Login> {
   String dropdownValue = 'Manufacturer';
 
   Future chooseFile() async {
-// http.Response response = await http.get(
-//    'https://cdn.pixabay.com/photo/2020/09/23/14/38/woman-5596173_960_720.jpg',
-//       );
-
-// print(base64Encode(response.bodyBytes));
-
     try {
       FilePickerResult result = await FilePicker.platform.pickFiles();
 
@@ -206,7 +199,7 @@ class _LoginState extends State<Login> {
                                       },
                                       items: <String>[
                                         'Manufacturer',
-                                        'Supplier',
+                                        'Distributor',
                                         'Wholesaler',
                                         'Retailer',
                                         'Customer'

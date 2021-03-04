@@ -6,11 +6,8 @@ import 'package:healthChain/drugHistory.dart';
 import 'package:healthChain/helperFunction.dart';
 import 'package:healthChain/manuform.dart';
 import 'package:healthChain/qrScanner.dart';
-import 'package:healthChain/success.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-import 'medicine_modal.dart';
 
 class Details extends StatefulWidget {
   final String scanResult;
@@ -31,7 +28,6 @@ class _DetailsState extends State<Details> {
   void initState() {
     print("initstate called");
     super.initState();
-    futureMedicine = getdata();
 
     print(HelperFunction.getClientDetailsPreference());
     getClientDetails() async {
@@ -45,6 +41,8 @@ class _DetailsState extends State<Details> {
     }
 
     getClientDetails();
+
+    futureMedicine = getdata();
   }
 
   onAddItemHandler() {
@@ -67,7 +65,7 @@ class _DetailsState extends State<Details> {
         MaterialPageRoute(
             builder: (context) => DrugHistory(widget.scanResult)));
 
-        // MaterialPageRoute(builder: (context) => Example1Vertical()));
+    // MaterialPageRoute(builder: (context) => Example1Vertical()));
   }
 
   Future<dynamic> getdata() async {
@@ -87,14 +85,20 @@ class _DetailsState extends State<Details> {
       setState(() {
         drugDetails = jsonResponse["state"];
       });
+
+      print("here is client details from getdata----------------");
+// print();
+
       print(jsonResponse['status']);
       if (response.statusCode == 200) {
         if (jsonResponse['state']['currentState'] == null) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      MedicineDataInputForm(widget.scanResult)));
+          if (jsonDecode(clientDetails)['organization'] == 'manufacturer') {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        MedicineDataInputForm(widget.scanResult)));
+          }
           print("drug not found");
           // Fluttertoast.showToast(
           //     msg: "Drug not manufactured!!",
@@ -136,11 +140,10 @@ class _DetailsState extends State<Details> {
   }
 
   Widget build(BuildContext context) {
-    print('client details in store is-----------');
-    print(clientDetails);
+    // print('client details in store is-----------');
+    // print(clientDetails);
 
     Map decodedClientDetails = jsonDecode(clientDetails);
-
     MediaQueryData queryData;
     queryData = MediaQuery.of(context);
     var containerHeight = queryData.size.height - 200;
@@ -175,11 +178,12 @@ class _DetailsState extends State<Details> {
                                 children: [
                                   SingleChildScrollView(
                                     child: Card(
-                                      color: Color.fromRGBO(255, 255, 255, 0.5),
+                                      color:
+                                          Colors.lightBlue[100],
                                       margin: EdgeInsets.symmetric(
-                                          vertical: 16.0, horizontal: 16.0),
+                                          vertical: 25.0, horizontal: 25.0),
                                       child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.all(25.0),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.stretch,
@@ -187,44 +191,62 @@ class _DetailsState extends State<Details> {
                                               MainAxisAlignment.center,
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
+                                            Container(
+                                                decoration: BoxDecoration(),
+                                                child: Center(
+                                                  child: Container(
+                                                    width: 120,
+                                                    height: 120,
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        image: DecorationImage(
+                                                          image: AssetImage(
+                                                              "assets/medicine_design.png"),
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )),
+                                            SizedBox(height: 20),
                                             Text(
-                                              "DrugNumber :" +
-                                                  snapshot.data["drugNumber"],
+                                              snapshot.data["name"],
                                               style: TextStyle(
-                                                fontSize: 18.0,
-                                              ),
+                                                  fontSize: 19.0,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(
+                                              height: 8,
                                             ),
                                             Text(
-                                              "manufacturer :" +
+                                              "Mfd By " +
                                                   snapshot.data["manufacturer"],
                                               style: TextStyle(
                                                 fontSize: 18.0,
                                               ),
                                             ),
                                             Text(
-                                              "manufacturedIn :" +
-                                                  snapshot
-                                                      .data["manufacturedIn"],
+                                              snapshot.data["manufacturedIn"],
                                               style: TextStyle(
                                                 fontSize: 18.0,
                                               ),
                                             ),
                                             Text(
-                                              "mfgDate :" +
+                                              "Date of Manufacture :" +
                                                   snapshot.data["mfgDate"],
                                               style: TextStyle(
                                                 fontSize: 18.0,
                                               ),
                                             ),
                                             Text(
-                                              "expDate :" +
+                                              "Expiry Date :" +
                                                   snapshot.data["expDate"],
                                               style: TextStyle(
                                                 fontSize: 18.0,
                                               ),
                                             ),
                                             Text(
-                                              "dose :" + snapshot.data["dose"],
+                                             snapshot.data["dose"],
                                               style: TextStyle(
                                                 fontSize: 18.0,
                                               ),
@@ -237,13 +259,13 @@ class _DetailsState extends State<Details> {
                                               ),
                                             ),
                                             Text(
-                                              "bn :" + snapshot.data["bn"],
+                                              snapshot.data["bn"],
                                               style: TextStyle(
                                                 fontSize: 18.0,
                                               ),
                                             ),
                                             Text(
-                                              "mrp :" + snapshot.data["mrp"],
+                                              "MRP \$" + snapshot.data["mrp"],
                                               style: TextStyle(
                                                 fontSize: 18.0,
                                               ),
@@ -300,7 +322,9 @@ class _DetailsState extends State<Details> {
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width - 50,
                           child: RaisedButton(
-                            color: drugDetails['currentState'] != 3
+                            color: drugDetails['currentState'] != 3 ||
+                                    jsonDecode(clientDetails)['organization'] !=
+                                        'manufacturer'
                                 ? Colors.lightBlue
                                 : Colors.lightBlue[300],
                             child: Padding(
@@ -318,7 +342,10 @@ class _DetailsState extends State<Details> {
                                 ? drugDetails['currentState'] != 3
                                     ? buyDrug
                                     : null
-                                : onAddItemHandler,
+                                : jsonDecode(clientDetails)['organization'] ==
+                                        'manufacturer'
+                                    ? onAddItemHandler
+                                    : null,
                           ),
                         ),
                       )

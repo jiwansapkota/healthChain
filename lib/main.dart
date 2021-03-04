@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:healthChain/details.dart';
+import 'package:healthChain/helperFunction.dart';
 import 'package:healthChain/login.dart';
-import 'package:healthChain/manuform.dart';
 import 'package:healthChain/qrScanner.dart';
-import 'package:healthChain/success.dart';
+import'dart:convert';
 
 void main() {
   runApp(MyApp());
@@ -15,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme:  ThemeData(
+      theme: ThemeData(
         // Define the default brightness and colors.
         brightness: Brightness.dark,
         primaryColor: Colors.green[800],
@@ -46,13 +45,30 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String clientDetails = "";
+  void initState() {
+    print("qr code initstate called");
+    super.initState();
+    getClientDetails() async {
+      print('here is the details of orgatinationas');
+      String receivedDetails =
+          await HelperFunction.getClientDetailsPreference();
+      print(receivedDetails);
+      setState(() {
+        clientDetails = receivedDetails;
+      });
+    }
+    getClientDetails();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Login()
-        // home: QrScanner(),
-        //  home: Details("2345"),
-        //  home:MedicineDataInputForm(),
+    // Map decodedClientDetails = jsonDecode(clientDetails);
+    return MaterialApp(
+       
+      debugShowCheckedModeBanner: false,
 
-        );
+      home: clientDetails!=null||clientDetails!="" ? QrScanner() : Login()
+    );
   }
 }

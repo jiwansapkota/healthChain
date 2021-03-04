@@ -94,9 +94,10 @@ class _DrugHistoryState extends State<DrugHistory> {
     // print(myArr);
 
     myArr.forEach((element) {
-      print('here is data-----------------------------------------------------------------------------');
+      print(
+          'here is data-----------------------------------------------------------------------------');
       print(jsonDecode(element['data']));
-     });
+    });
 
     // for(var i = 0;i<myArr.length;i++){
     //   print(jsonDecode(myArr[i]['data']));
@@ -157,7 +158,7 @@ class _DrugHistoryState extends State<DrugHistory> {
                                           height: 20,
                                           width: 20,
                                           decoration: BoxDecoration(
-                                            color: Colors.blue,
+                                            color: Colors.lightBlue[300],
                                             borderRadius:
                                                 BorderRadius.circular(20),
                                           ),
@@ -172,7 +173,7 @@ class _DrugHistoryState extends State<DrugHistory> {
                                                 height: 175,
                                                 width: 4,
                                                 decoration: BoxDecoration(
-                                                  color: Colors.blue,
+                                                  color: Colors.lightBlue[300],
                                                   // borderRadius: BorderRadius.circular(20),
                                                 ),
                                               ),
@@ -204,14 +205,144 @@ class _DrugHistoryState extends State<DrugHistory> {
                             child: Column(
                               children: [
                                 ...myArr.map((value) {
-                                  return Container(
-                                    width: 4 * w / 5,
-                                    height: 200,
-                                    child: Card(
-                                      margin: EdgeInsets.fromLTRB(0, 20, 30, 0),
-                                      child: Text(jsonDecode(value['data'])['owner']),
-                                    ),
-                                  );
+                                  Map data = jsonDecode(myArr[myArr.length -
+                                      1 -
+                                      myArr.indexOf(value)]['data']);
+
+                                  return data['currentState'] == 1
+                                      //for manufacturer
+                                      ? Container(
+                                          width: 4 * w / 5,
+                                          height: 200,
+                                          child: Card(
+                                            color: Colors.lightBlue[100],
+                                            margin: EdgeInsets.fromLTRB(
+                                                0, 20, 30, 0),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(25.0),
+                                              child: Container(
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(0, 0, 0, 5),
+                                                      child: Text(
+                                                        "Manufacturing of Drug",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(0, 0, 0, 0),
+                                                      child: Text(
+                                                        "By " + data['owner'],
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      data['manufacturedIn'] !=
+                                                              null
+                                                          ? data[
+                                                              'manufacturedIn']
+                                                          : 'NA',
+                                                      style: TextStyle(),
+                                                    ),
+                                                    Text(
+                                                      data['mfgDate'] != null
+                                                          ? data['mfgDate']
+                                                          : 'NA',
+                                                      style: TextStyle(),
+                                                    ),
+                                                    Text(
+                                                      data['mrp'] != null
+                                                          ? 'MRP ' +
+                                                              '\$' +
+                                                              data['mrp']
+                                                          : 'NA',
+                                                      style: TextStyle(
+                                                          // fontWeight: FontWeight.bold
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+
+                                      //for others
+                                      : Container(
+                                          width: 4 * w / 5,
+                                          height: 200,
+                                          child: Card(
+                                            margin: EdgeInsets.fromLTRB(
+                                                0, 20, 30, 0),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(25.0),
+                                              child: Container(
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(0, 0, 0, 5),
+                                                      child: Text(
+                                                        data['currentState'] ==
+                                                                3
+                                                            ? 'Consumer'
+                                                            : data['owner'],
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      data['purchasePlace'] !=
+                                                              null
+                                                          ? data[
+                                                              'purchasePlace']
+                                                          : 'NA',
+                                                      style: TextStyle(),
+                                                    ),
+                                                    Text(
+                                                      data['purchaseDateTime'] !=
+                                                              null
+                                                          ? data[
+                                                              'purchaseDateTime']
+                                                          : 'NA',
+                                                      style: TextStyle(),
+                                                    ),
+                                                    Text(
+                                                      data['boughtAt'] != null
+                                                          ? '\$' +
+                                                              data['boughtAt']
+                                                          : 'NA',
+                                                      style: TextStyle(
+                                                          // fontWeight: FontWeight.bold
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
                                 }).toList(),
                               ],
                             )),
