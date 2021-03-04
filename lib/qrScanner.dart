@@ -13,7 +13,7 @@ class QrScanner extends StatefulWidget {
 
 class _QrScannerState extends State<QrScanner> {
   String scanResult = "";
-  String clientDetails;
+  String clientDetails = "";
   bool isLoading = true;
 
   void initState() {
@@ -55,10 +55,14 @@ class _QrScannerState extends State<QrScanner> {
   Widget build(BuildContext context) {
     print(
         'CLIENT DETIALS----------------------------------------------------------------------------');
-    print(jsonDecode(clientDetails));
+    try {
+      print(clientDetails);
+    } catch (e) {
+      print('error has occured');
+    }
     print(
         'CLIENT DETAILS----------------------------------------------------------------------------');
-    Map decodedClientDetails = jsonDecode(clientDetails);
+    Map decodedClientDetails = {"organization": "customer"};
     return Scaffold(
       drawer: !isLoading
           ? Drawer(
@@ -194,7 +198,9 @@ class _QrScannerState extends State<QrScanner> {
                   ),
                 ),
               ),
-              SizedBox(height: 60,),
+              SizedBox(
+                height: 60,
+              ),
               RaisedButton(
                 color: Colors.blue,
                 child: Text(

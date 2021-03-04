@@ -126,7 +126,30 @@ class _LoginState extends State<Login> {
             width: MediaQuery.of(context).size.width,
             child: Column(
               children: [
-                SizedBox(height: MediaQuery.of(context).size.height - 195),
+                Container(
+                  height: MediaQuery.of(context).size.height - 195,
+                  child: Center(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 200,
+                        width: 200,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage("assets/logo.png"),
+                            // fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Text("MedicoChain",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 24)),
+                      ),
+                    ],
+                  )),
+                ),
                 Center(
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width - 50,
