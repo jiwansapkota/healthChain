@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:healthChain/helperFunction.dart';
-import 'package:healthChain/login.dart';
-import 'package:healthChain/qrScanner.dart';
+import 'package:MedicoChain/helperFunction.dart';
+import 'package:MedicoChain/login.dart';
+import 'package:MedicoChain/qrScanner.dart';
 import'dart:convert';
 
 void main() {
@@ -45,21 +45,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String clientDetails = "";
-  void initState() {
-    print("qr code initstate called");
-    super.initState();
-    getClientDetails() async {
-      print('here is the details of orgatinationas');
-      String receivedDetails =
-          await HelperFunction.getClientDetailsPreference();
-      print(receivedDetails);
-      setState(() {
-        clientDetails = receivedDetails;
-      });
-    }
-    getClientDetails();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
        
       debugShowCheckedModeBanner: false,
 
-      home: clientDetails!=null||clientDetails!="" ? QrScanner() : Login()
+      home: Login()
     );
   }
 }

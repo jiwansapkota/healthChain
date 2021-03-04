@@ -1,4 +1,4 @@
-# healthChain
+# MedicoChain
 
 A new Flutter project.
 

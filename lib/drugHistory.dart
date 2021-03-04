@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:healthChain/constant.dart';
+import 'package:MedicoChain/constant.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

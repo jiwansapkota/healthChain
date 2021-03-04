@@ -1,4 +1,4 @@
-package com.example.healthChain
+package com.example.MedicoChain
 
 import io.flutter.embedding.android.FlutterActivity
 

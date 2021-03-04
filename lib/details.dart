@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:healthChain/buyerForm.dart';
-import 'package:healthChain/constant.dart';
+import 'package:MedicoChain/buyerForm.dart';
+import 'package:MedicoChain/constant.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:healthChain/drugHistory.dart';
-import 'package:healthChain/helperFunction.dart';
-import 'package:healthChain/manuform.dart';
-import 'package:healthChain/qrScanner.dart';
+import 'package:MedicoChain/drugHistory.dart';
+import 'package:MedicoChain/helperFunction.dart';
+import 'package:MedicoChain/manuform.dart';
+import 'package:MedicoChain/qrScanner.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

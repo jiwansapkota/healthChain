@@ -1,9 +1,9 @@
-import 'package:healthChain/details.dart';
-import 'package:healthChain/login.dart';
+import 'package:MedicoChain/details.dart';
+import 'package:MedicoChain/login.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:flutter/material.dart';
 import 'constant.dart';
-import 'package:healthChain/helperFunction.dart';
+import 'package:MedicoChain/helperFunction.dart';
 import 'dart:convert';
 
 class QrScanner extends StatefulWidget {
@@ -20,9 +20,11 @@ class _QrScannerState extends State<QrScanner> {
     print("qr code initstate called");
     super.initState();
     getClientDetails() async {
-      print('here is the details of orgatinationas');
+      print(
+          'here is the details of orgatinationas-======================================================');
       String receivedDetails =
           await HelperFunction.getClientDetailsPreference();
+
       print(receivedDetails);
       setState(() {
         clientDetails = receivedDetails;
@@ -55,14 +57,15 @@ class _QrScannerState extends State<QrScanner> {
   Widget build(BuildContext context) {
     print(
         'CLIENT DETIALS----------------------------------------------------------------------------');
+    Map decodedClientDetails = {"organization": "customer"};
     try {
       print(clientDetails);
+      decodedClientDetails = jsonDecode(clientDetails);
     } catch (e) {
       print('error has occured');
     }
     print(
         'CLIENT DETAILS----------------------------------------------------------------------------');
-    Map decodedClientDetails = {"organization": "customer"};
     return Scaffold(
       drawer: !isLoading
           ? Drawer(
@@ -175,7 +178,7 @@ class _QrScannerState extends State<QrScanner> {
             )
           : Drawer(),
       appBar: AppBar(
-        title: Text('HealthChain App'),
+        title: Text('MedicoChain App'),
       ),
       body: Container(
         // decoration: BoxDecoration(
@@ -207,8 +210,8 @@ class _QrScannerState extends State<QrScanner> {
                   'Click Here To Scan',
                   style: TextStyle(color: Colors.white),
                 ),
-                // onPressed: scanQRCode,
-                onPressed: () {},
+                onPressed: scanQRCode,
+                // onPressed: () {},
               )
             ],
           ),

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:healthChain/login.dart';
+import 'package:MedicoChain/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class HelperFunction{
 static String sharedPreferenceClientDetails="clientDetails";
