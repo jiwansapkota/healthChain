@@ -1,6 +1,6 @@
 # MedicoChain
 
-A new Flutter project.
+This is a simple flutter app client for medicine supply chain ledger application "MedicoChain".
 
 ## Getting Started
 
